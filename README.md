@@ -1,4 +1,4 @@
-# shareImage# react-sanity-imageApp-guide
+#  react-sanity-imageApp-guide
 
 1.create two folder Client(React)ad Server(Sanity)
 
