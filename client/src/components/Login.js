@@ -51,7 +51,8 @@ const responseGoogle = (response)=>{
                 <GoogleLogin 
                 clientId={process.env.REACT_APP_GOOGLE_API_TOKEN } 
                 render={(renderProps)=>(
-                    <button type='button' className='bg-mainColor flex justify-center items-center p-3 rounded-lg cursor-pointer outline-none' onClick={renderProps.onClick}
+                    <button type='button' className='bg-mainColor flex justify-center items-center p-3 rounded-lg cursor-pointer outline-none' 
+                    onClick={renderProps.onClick}
                     disabled={renderProps.disabled}>
                         <FcGoogle  className='mr-4'/> Sign in With Google
                     </button>
