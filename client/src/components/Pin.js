@@ -43,7 +43,7 @@ function Pin({pin}) {
                             >
                                 <MdDownloadForOffline/>
                             </a>
-                        </div>
+                        </div> 
                     </div>
                 </div>
             )}
