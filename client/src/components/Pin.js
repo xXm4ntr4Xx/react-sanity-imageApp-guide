@@ -9,16 +9,48 @@ import { BsFillArrowUpRightCircleFill} from 'react-icons/bs'
 
 
 import { client,urlFor } from '../client'
+import { fetchUser } from '../utils/fetchUser'
 
 
-function Pin({pin}) {
+function Pin({pin:{postedBy,image, _id,destination,save}}) {
     const [postHovered, setPostHovered] = useState(false)
-    const [savingPost, setSavingPost] = useState(false)
 
     const navigate = useNavigate()
+    const user = fetchUser();
 
+   
 
-    const {postedBy,image, _id,destination} =pin;
+    const alreadySaved = !!(save?.filter((item)=> item.postedBy.id===user.googleId))?.length;
+
+//////
+    const savePin = (id)=>{
+        if(!alreadySaved){
+
+            client
+                .patch(id)
+                .setIfMissing({save:[]})
+                .insert('after','save[-1]',[{
+                    _key:uuidV4(),
+                    userId: user.googleId,
+                    postedBy:{
+                        _type:'postedBy',
+                        _ref: user.googleId
+                    }
+                }])
+                .commit()
+                .then(()=>{
+                    window.location.reload();
+                })
+        }
+    }
+    //////
+    const deletePin = (id)=>{
+        client
+        .delete(id)
+        .then(()=>{
+            window.location.reload();
+        })
+    }
 
 
 
@@ -38,12 +70,54 @@ function Pin({pin}) {
                             <a
                                 href={`${image?.asset?.url}?dl=`}
                                 download
-                                // onClick={(e)=> e.stopPropagation()}
+                                onClick={(e)=> e.stopPropagation()}
                                 className=' bg-white w-9 h-9 rounded-full items-center justify-center text-dark text-xl opacity-75 hover:opacity-100 hover:shadow-md outline-none'
                             >
                                 <MdDownloadForOffline/>
                             </a>
                         </div> 
+                        {alreadySaved ? (
+                            <button
+                                type='button'
+                                className='  bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
+                            >
+                              {save?.length}  Saved
+                            </button>
+                        ):(
+                            <button type='button' className=' bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
+                            onClick={(e)=>{
+                                e.stopPropagation()
+                                savePin(_id)
+                            }}
+                            >
+                                Save
+                            </button>
+                        )}
+                    </div>
+                    <div className=' flex justify-between items-center gap-2 w-full'>
+                        {destination && (
+                            <a
+                                href={destination}
+                                target='_blank'
+                                rel='noreferrer'
+                                className=' bg-white flex items-center gap-2 text-black font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:opacity-100 hover:shadow-md'
+                            >
+                                <BsFillArrowUpRightCircleFill/>
+                                {destination.length > 20 ? destination.slice(8,20): destination.slice(8)}
+                            </a>
+                        )}
+                        {postedBy?._id === user.googleId && (
+                            <button 
+                            className=' bg-white p-2 opacity-70 hover:opacity-100 font-bold text-dark px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none'
+                            type='button'
+                            onClick={(e)=>{
+                                e.stopPropagation()
+                                deletePin(_id)
+                            }}
+                            >
+                                <AiTwotoneDelete/>
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
