@@ -44,5 +44,6 @@
 <img width="198" alt="Screenshot 2022-04-04 at 15 41 40" src="https://user-images.githubusercontent.com/74420607/161568664-a56999ca-9a76-4563-951a-7a26b0fb7a62.png">
 
 and so on with the rest of schemas we need
-<hr/>
 
+<hr/>
+7.
