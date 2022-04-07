@@ -2,7 +2,7 @@ export default {
     name:'user',
     title:'User',
     type:'document',
-    fields:[{
+    fields:[{//field inside the User table (USERNAME,INPUT section)
         name:'userName',
         title:'Username',
         type:'string'
